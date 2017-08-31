@@ -1,26 +1,65 @@
 {
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
-    "parameters": {},
-    "variables": {
-        "apiVersion": "2017-05-01",
-        "vNetName": "singleVnet",
-        "templateBaseUrl": ""
-    },
-    "resources": ["resources": [{
-        "apiVersion": "[variables('apiVersion')]",
-        "name": "linkedVnet",
-        "type": "Microsoft.Resources/deployments",
-        "properties": {
-            "mode": "incremental",
-            "templateLink": {
-                "uri": "https://www.contoso.com/AzureTemplates/newStorageAccount.json",
-                "contentVersion": "1.0.0.0"
-            },
-            "parameters": {
-                "StorageAccountName": { "value": "[parameters('StorageAccountName')]" }
+    "parameters": {
+        "vnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the vNet"
+            }
+        },
+        "subnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the network subnet"
             }
         }
-    }]],
+    },
+    "variables": {
+        "apiVersion": "2017-05-01",
+        "templateBaseUrl": "https://raw.githubusercontent.com/AzureCAT-GSI/FireHoseTraining2017/master/armBestPractices/",
+        "vnetTemplateUrl": "[concat(variables('templateBaseUrl'), 'Resources/vNet.json')]"
+    },
+    "resources": [{
+            "apiVersion": "[variables('apiVersion')]",
+            "name": "linkedVnet",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "incremental",
+                "templateLink": {
+                    "uri": "[variables('vnetTemplateUrl')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vnetName": {
+                        "value": "[parameters('vnetName')]"
+                    },
+                    "subnetName": {
+                        "value": "[parameters('subnetName')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "[variables('apiVersion')]",
+            "name": "linkedNic",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "incremental",
+                "templateLink": {
+                    "uri": "[variables('vnetTemplateUrl')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vnetName": {
+                        "value": "[parameters('vnetName')]"
+                    },
+                    "subnetName": {
+                        "value": "[parameters('subnetName')]"
+                    }
+                }
+            }
+        }
+    ],
     "outputs": {}
 }

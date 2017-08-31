@@ -15,27 +15,26 @@
             }
         }
     },
-    "variables": {
-        "vnetApiVersion": "2015-06-15"
-    },
+    "variables": {},
     "resources": [{
-        "apiVersion": "[variables('vnetApiVersion')]",
-        "type": "Microsoft.Network/virtualNetworks",
-        "name": "[parameters('vnetName')]",
+        "apiVersion": "2015-06-15",
+        "type": "Microsoft.Network/networkInterfaces",
+        "name": "NetworkInterface1",
         "location": "[resourceGroup().location]",
         "tags": {
-            "displayName": "VirtualNetwork1"
+            "displayName": "NetworkInterface1"
         },
+        "dependsOn": [
+            "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
+        ],
         "properties": {
-            "addressSpace": {
-                "addressPrefixes": [
-                    "10.0.0.0/16"
-                ]
-            },
-            "subnets": [{
-                "name": "[parameters('subnetName')]",
+            "ipConfigurations": [{
+                "name": "ipconfig1",
                 "properties": {
-                    "addressPrefix": "10.0.0.0/24"
+                    "privateIPAllocationMethod": "Dynamic",
+                    "subnet": {
+                        "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '/subnets/', parameters('subnetName'))]"
+                    }
                 }
             }]
         }
