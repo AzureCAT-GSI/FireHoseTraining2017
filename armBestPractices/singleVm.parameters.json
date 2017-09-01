@@ -12,7 +12,7 @@
             "value": "pittiepotomus"
         },
         "vmSize": {
-            "value": "Standard_D3_v2"
+            "value": "Standard_D2"
         },
         "adminUser": {
             "value": "jogardn"
