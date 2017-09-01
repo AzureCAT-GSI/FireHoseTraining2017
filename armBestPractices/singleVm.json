@@ -13,6 +13,12 @@
             "metadata": {
                 "description": "Name of the network subnet"
             }
+        },
+        "vmName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the VM"
+            }
         }
     },
     "variables": {
@@ -61,6 +67,9 @@
                     },
                     "subnetName": {
                         "value": "[parameters('subnetName')]"
+                    },
+                    "vmName": {
+                        "value": "[parameters('vmName')]"
                     }
                 }
             }

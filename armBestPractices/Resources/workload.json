@@ -13,28 +13,43 @@
             "metadata": {
                 "description": "Name of the network subnet"
             }
+        },
+        "vmName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name for the VM"
+            }
         }
     },
-    "variables": {},
+    "variables": {
+        "apiVersion": "2017-06-01",
+    },
     "resources": [{
-        "apiVersion": "2015-06-15",
-        "type": "Microsoft.Network/networkInterfaces",
-        "name": "NetworkInterface1",
-        "location": "[resourceGroup().location]",
-        "tags": {
-            "displayName": "NetworkInterface1"
-        },
-        "properties": {
-            "ipConfigurations": [{
-                "name": "ipconfig1",
-                "properties": {
-                    "privateIPAllocationMethod": "Dynamic",
-                    "subnet": {
-                        "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '/subnets/', parameters('subnetName'))]"
+            "apiVersion": "[variables('apiVersion')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[concat(parameters('vmName'), '-nicName1')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "ipConfigurations": [{
+                    "name": "[concat(parameters('vmName'), '-ipconfig1')]",
+                    "properties": {
+                        "privateIPAllocationMethod": "Dynamic",
+                        "subnet": {
+                            "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '/subnets/', parameters('subnetName'))]"
+                        }
                     }
-                }
-            }]
+                }]
+            }
+        },
+        {
+            "apiVersion": "[variables('apiVersion')]",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "name": "[concat(parameters('vmName'),'-ipName1')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic"
+            }
         }
-    }],
+    ],
     "outputs": {}
 }
