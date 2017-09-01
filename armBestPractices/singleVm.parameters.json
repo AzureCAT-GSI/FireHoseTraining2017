@@ -10,6 +10,12 @@
         },
         "vmName": {
             "value": "pittiepotomus"
+        },
+        "vmSize": {
+            "value": "Standard_D3_v2"
+        },
+        "adminUser": {
+            "value": "jogardn"
         }
     }
 }

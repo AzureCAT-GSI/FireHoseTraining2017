@@ -3,26 +3,27 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "vnetName": {
-            "type": "string",
-            "metadata": {
-                "description": "Name of the vNet"
-            }
+            "type": "string"
         },
         "subnetName": {
-            "type": "string",
-            "metadata": {
-                "description": "Name of the network subnet"
-            }
+            "type": "string"
         },
         "vmName": {
-            "type": "string",
-            "metadata": {
-                "description": "Name for the VM"
-            }
+            "type": "string"
+        },
+        "vmSize": {
+            "type": "string"
+        },
+        "adminUser": {
+            "type": "string"
+        },
+        "adminPassword": {
+            "type": "string"
         }
     },
     "variables": {
         "apiVersion": "2017-06-01",
+        "nicName": "[concat(parameters('vmName'),'-ipName1')]"
     },
     "resources": [{
             "apiVersion": "[variables('apiVersion')]",
@@ -44,10 +45,51 @@
         {
             "apiVersion": "[variables('apiVersion')]",
             "type": "Microsoft.Network/publicIPAddresses",
-            "name": "[concat(parameters('vmName'),'-ipName1')]",
+            "name": "[variables('nicName')]",
             "location": "[resourceGroup().location]",
             "properties": {
                 "publicIPAllocationMethod": "Dynamic"
+            }
+        },
+        {
+            "apiVersion": "[variables('apiVersion')]",
+            "type": "Microsoft.Compute/virtualMachines",
+            "name": "[parameters('vmName')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/', variables('nicName')]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('vmSize')]"
+                },
+                "osProfile": {
+                    "computerName": "WindowsVM1",
+                    "adminUsername": "[parameters('adminUser')]",
+                    "adminPassword": "[parameters('adminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2012-R2-Datacenter",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "WindowsVM1OSDisk",
+                        "createOption": "FromImage"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [{
+                        "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
+                    }]
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": false
+                    }
+                }
             }
         }
     ],
