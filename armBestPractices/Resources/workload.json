@@ -23,7 +23,7 @@
     },
     "variables": {
         "apiVersion": "2017-06-01",
-        "vmApiVersion": "2017-03-30"
+        "vmApiVersion": "2017-03-30",
         "nicName": "[concat(parameters('vmName'),'-nicName1')]",
         "ipName": "[concat(parameters('vmName'),'-ipName1')]"
     },
