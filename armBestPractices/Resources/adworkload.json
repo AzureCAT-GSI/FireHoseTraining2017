@@ -30,11 +30,27 @@
     },
     "resources": [{
             "apiVersion": "[variables('apiVersion')]",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "copy": {
+                "name": "ipCopyLoop",
+                "count": "[variables('copyCount')]"
+            },
+            "name": "[concat(variables('ipName'), '-', copyIndex())]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic"
+            }
+        },
+        {
+            "apiVersion": "[variables('apiVersion')]",
             "type": "Microsoft.Network/networkInterfaces",
             "copy": {
                 "name": "nicCopyLoop",
                 "count": "[variables('copyCount')]"
             },
+            "dependsOn": [
+                "[concat('Microsoft.Network/publicIPAddresses/', variables('ipName'), '-', copyIndex())]"
+            ],
             "name": "[concat(variables('nicName'), '-', copyIndex())]",
             "location": "[resourceGroup().location]",
             "properties": {
