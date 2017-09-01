@@ -63,10 +63,10 @@
                         "privateIPAllocationMethod": "Dynamic",
                         "publicIPAddress": {
                             "id": "[resourceId('Microsoft.Network/publicIPAddresses/', concat(variables('ipName'), '-', copyIndex()))]"
+                        },
+                        "subnet": {
+                            "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '/subnets/', parameters('subnetName'))]"
                         }
-                    },
-                    "subnet": {
-                        "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '/subnets/', parameters('subnetName'))]"
                     }
                 }]
             }
