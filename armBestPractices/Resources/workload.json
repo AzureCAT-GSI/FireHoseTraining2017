@@ -23,6 +23,7 @@
     },
     "variables": {
         "apiVersion": "2017-06-01",
+        "vmApiVersion": "2017-03-30"
         "nicName": "[concat(parameters('vmName'),'-nicName1')]",
         "ipName": "[concat(parameters('vmName'),'-ipName1')]"
     },
@@ -56,7 +57,7 @@
             }
         },
         {
-            "apiVersion": "[variables('apiVersion')]",
+            "apiVersion": "[variables('vmApiVersion')]",
             "type": "Microsoft.Compute/virtualMachines",
             "name": "[parameters('vmName')]",
             "location": "[resourceGroup().location]",
