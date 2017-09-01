@@ -23,12 +23,13 @@
     },
     "variables": {
         "apiVersion": "2017-06-01",
-        "nicName": "[concat(parameters('vmName'),'-ipName1')]"
+        "nicName": "[concat(parameters('vmName'),'-nicName1')]",
+        "ipName": "[concat(parameters('vmName'),'-ipName1')]"
     },
     "resources": [{
             "apiVersion": "[variables('apiVersion')]",
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "[concat(parameters('vmName'), '-nicName1')]",
+            "name": "[variables('nicName')]",
             "location": "[resourceGroup().location]",
             "properties": {
                 "ipConfigurations": [{
@@ -45,8 +46,11 @@
         {
             "apiVersion": "[variables('apiVersion')]",
             "type": "Microsoft.Network/publicIPAddresses",
-            "name": "[variables('nicName')]",
+            "name": "[variables('ipName')]",
             "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+            ],
             "properties": {
                 "publicIPAllocationMethod": "Dynamic"
             }
