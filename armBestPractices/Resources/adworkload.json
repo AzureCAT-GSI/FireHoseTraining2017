@@ -95,7 +95,7 @@
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '-', copyIndex())]",
-                "[concat('Microsoft.Compute/availabilitySets', variables('availabilitySetName'))]"
+                "[concat('Microsoft.Compute/availabilitySets/', variables('availabilitySetName'))]"
             ],
             "properties": {
                 "hardwareProfile": {
