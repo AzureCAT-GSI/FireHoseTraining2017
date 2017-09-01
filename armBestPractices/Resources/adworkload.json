@@ -26,7 +26,8 @@
         "vmApiVersion": "2017-03-30",
         "nicName": "[concat(parameters('vmName'),'-nic1')]",
         "ipName": "[concat(parameters('vmName'),'-ip1')]",
-        "copyCount": 2
+        "copyCount": 2,
+        "availabilitySetName": "[concat(parameters('vmName'), 'availiblitySet')]"
     },
     "resources": [{
             "apiVersion": "[variables('apiVersion')]",
@@ -58,11 +59,27 @@
                     "name": "[concat(parameters('vmName'), '-ipconfig')]",
                     "properties": {
                         "privateIPAllocationMethod": "Dynamic",
-                        "subnet": {
-                            "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '/subnets/', parameters('subnetName'))]"
+                        "publicIPAddress": {
+                            "id": "[resourceId('Microsoft.Network/publicIPAddresses/', concat(variables('ipName'), '-', copyIndex()))]"
                         }
+                    },
+                    "subnet": {
+                        "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '/subnets/', parameters('subnetName'))]"
                     }
                 }]
+            }
+        },
+        {
+            "name": "[variables('availabilitySetName')]",
+            "type": "Microsoft.Compute/availabilitySets",
+            "apiVersion": "[variables('apiVersion')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "platformUpdateDomainCount": "integer",
+                "platformFaultDomainCount": "integer"
+            },
+            "sku": {
+                "name": "Aligned"
             }
         },
         {
@@ -75,7 +92,8 @@
             "name": "[concat(parameters('vmName'), '-', copyIndex())]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '-', copyIndex())]"
+                "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '-', copyIndex())]",
+                "[concat('Microsoft.Compute/availabilitySets', variables('availabilitySetName'))]"
             ],
             "properties": {
                 "hardwareProfile": {
@@ -102,6 +120,9 @@
                     "networkInterfaces": [{
                         "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('nicName'), '-', copyIndex()))]"
                     }]
+                },
+                "availabilitySet": {
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('availabilitySetName'))]"
                 },
                 "diagnosticsProfile": {
                     "bootDiagnostics": {
