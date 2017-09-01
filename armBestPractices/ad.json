@@ -110,7 +110,7 @@
         "templateBranch": "ArmBestPractices",
         "templateBaseUrl": "[concat('https://raw.githubusercontent.com/AzureCAT-GSI/FireHoseTraining2017/', variables('templateBranch'),'/armBestPractices/')]",
         "infraTemplateUrl": "[concat(variables('templateBaseUrl'), 'Resources/infra.json')]",
-        "workloadTemplateUrl": "[concat(variables('templateBaseUrl'), 'Resources/ad.json')]"
+        "workloadTemplateUrl": "[concat(variables('templateBaseUrl'), 'Resources/adworkload.json')]"
     },
     "resources": [{
             "apiVersion": "[variables('apiVersion')]",

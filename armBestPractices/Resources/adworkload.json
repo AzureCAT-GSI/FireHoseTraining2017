@@ -39,7 +39,7 @@
             "location": "[resourceGroup().location]",
             "properties": {
                 "ipConfigurations": [{
-                    "name": "[concat(parameters('vmName'), '-ipconfig-', copyIndex())]",
+                    "name": "[concat(parameters('vmName'), '-ipconfig')]",
                     "properties": {
                         "privateIPAllocationMethod": "Dynamic",
                         "subnet": {
