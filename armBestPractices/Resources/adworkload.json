@@ -23,6 +23,7 @@
     },
     "variables": {
         "apiVersion": "2017-06-01",
+        "availabilitySetApiVersion": "2017-03-30",
         "vmApiVersion": "2017-03-30",
         "nicName": "[concat(parameters('vmName'),'-nic1')]",
         "ipName": "[concat(parameters('vmName'),'-ip1')]",
@@ -74,7 +75,7 @@
         {
             "name": "[variables('availabilitySetName')]",
             "type": "Microsoft.Compute/availabilitySets",
-            "apiVersion": "[variables('apiVersion')]",
+            "apiVersion": "[variables('availabilitySetApiVersion')]",
             "location": "[resourceGroup().location]",
             "properties": {
                 "platformUpdateDomainCount": "[variables('availabilitySetPlatformUpdateDomainCount')]",
