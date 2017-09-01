@@ -24,9 +24,6 @@
         "tags": {
             "displayName": "NetworkInterface1"
         },
-        "dependsOn": [
-            "[resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks', parameters('vnetName'))]"
-        ],
         "properties": {
             "ipConfigurations": [{
                 "name": "ipconfig1",

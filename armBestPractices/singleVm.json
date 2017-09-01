@@ -17,17 +17,19 @@
     },
     "variables": {
         "apiVersion": "2017-05-01",
-        "templateBaseUrl": "https://raw.githubusercontent.com/AzureCAT-GSI/FireHoseTraining2017/master/armBestPractices/",
-        "vnetTemplateUrl": "[concat(variables('templateBaseUrl'), 'Resources/vNet.json')]"
+        "templateBranch": "ArmBestPractices",
+        "templateBaseUrl": "[concat('https://raw.githubusercontent.com/AzureCAT-GSI/FireHoseTraining2017/', variables('templateBranch'),'/armBestPractices/')]",
+        "infraTemplateUrl": "[concat(variables('templateBaseUrl'), 'Resources/infra.json')]",
+        "workloadTemplateUrl": "[concat(variables('templateBaseUrl'), 'Resources/workload.json')]"
     },
     "resources": [{
             "apiVersion": "[variables('apiVersion')]",
-            "name": "linkedVnet",
+            "name": "infra",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "incremental",
                 "templateLink": {
-                    "uri": "[variables('vnetTemplateUrl')]",
+                    "uri": "[variables('infraTemplateUrl')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -42,12 +44,15 @@
         },
         {
             "apiVersion": "[variables('apiVersion')]",
-            "name": "linkedNic",
+            "name": "workload",
             "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "Microsoft.Resources/deployments/infra"
+            ],
             "properties": {
                 "mode": "incremental",
                 "templateLink": {
-                    "uri": "[variables('vnetTemplateUrl')]",
+                    "uri": "[variables('workloadTemplateUrl')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
