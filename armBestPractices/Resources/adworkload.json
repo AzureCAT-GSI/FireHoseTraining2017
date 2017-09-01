@@ -35,7 +35,7 @@
                 "name": "ipCopyLoop",
                 "count": "[variables('copyCount')]"
             },
-            "name": "concat([variables('ipName'), '-', copyIndex())]",
+            "name": "[variables('ipName')]",
             "location": "[resourceGroup().location]",
             "properties": {
                 "publicIPAllocationMethod": "Dynamic"
