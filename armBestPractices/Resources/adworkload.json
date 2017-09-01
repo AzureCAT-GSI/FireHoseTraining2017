@@ -1,0 +1,139 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vnetName": {
+            "type": "string"
+        },
+        "subnetName": {
+            "type": "string"
+        },
+        "vmName": {
+            "type": "string"
+        },
+        "vmSize": {
+            "type": "string"
+        },
+        "adminUser": {
+            "type": "string"
+        },
+        "adminPassword": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "apiVersion": "2017-08-01",
+        "availabilitySetApiVersion": "2017-03-30",
+        "vmApiVersion": "2017-03-30",
+        "nicName": "[concat(parameters('vmName'),'-nic1')]",
+        "ipName": "[concat(parameters('vmName'),'-ip1')]",
+        "copyCount": 2,
+        "availabilitySetName": "[concat(parameters('vmName'), 'availiblitySet')]",
+        "availabilitySetPlatformFaultDomainCount": 2,
+        "availabilitySetPlatformUpdateDomainCount": 5
+    },
+    "resources": [{
+            "apiVersion": "[variables('apiVersion')]",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "copy": {
+                "name": "ipCopyLoop",
+                "count": "[variables('copyCount')]"
+            },
+            "name": "[concat(variables('ipName'), '-', copyIndex())]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic"
+            }
+        },
+        {
+            "apiVersion": "[variables('apiVersion')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "copy": {
+                "name": "nicCopyLoop",
+                "count": "[variables('copyCount')]"
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Network/publicIPAddresses/', variables('ipName'), '-', copyIndex())]"
+            ],
+            "name": "[concat(variables('nicName'), '-', copyIndex())]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "ipConfigurations": [{
+                    "name": "[concat(parameters('vmName'), '-ipconfig')]",
+                    "properties": {
+                        "privateIPAllocationMethod": "Dynamic",
+                        "publicIPAddress": {
+                            "id": "[resourceId('Microsoft.Network/publicIPAddresses/', concat(variables('ipName'), '-', copyIndex()))]"
+                        },
+                        "subnet": {
+                            "id": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '/subnets/', parameters('subnetName'))]"
+                        }
+                    }
+                }]
+            }
+        },
+        {
+            "name": "[variables('availabilitySetName')]",
+            "type": "Microsoft.Compute/availabilitySets",
+            "apiVersion": "[variables('availabilitySetApiVersion')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "platformUpdateDomainCount": "[variables('availabilitySetPlatformUpdateDomainCount')]",
+                "platformFaultDomainCount": "[variables('availabilitySetPlatformFaultDomainCount')]"
+            },
+            "sku": {
+                "name": "Aligned"
+            }
+        },
+        {
+            "apiVersion": "[variables('vmApiVersion')]",
+            "type": "Microsoft.Compute/virtualMachines",
+            "copy": {
+                "name": "vmCopyLoop",
+                "count": "[variables('copyCount')]"
+            },
+            "name": "[concat(parameters('vmName'), '-', copyIndex())]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/', variables('nicName'), '-', copyIndex())]",
+                "[concat('Microsoft.Compute/availabilitySets/', variables('availabilitySetName'))]"
+            ],
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[parameters('vmSize')]"
+                },
+                "osProfile": {
+                    "computerName": "[concat('WindowsVM', '-', copyIndex())]",
+                    "adminUsername": "[parameters('adminUser')]",
+                    "adminPassword": "[parameters('adminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "MicrosoftWindowsServer",
+                        "offer": "WindowsServer",
+                        "sku": "2012-R2-Datacenter",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "[concat('WindowsVM1OSDisk', copyIndex())]",
+                        "createOption": "FromImage"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [{
+                        "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('nicName'), '-', copyIndex()))]"
+                    }]
+                },
+                "availabilitySet": {
+                    "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('availabilitySetName'))]"
+                },
+                "diagnosticsProfile": {
+                    "bootDiagnostics": {
+                        "enabled": false
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}

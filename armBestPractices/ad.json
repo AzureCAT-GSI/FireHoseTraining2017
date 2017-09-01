@@ -1,0 +1,172 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "vnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the vNet"
+            }
+        },
+        "subnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the network subnet"
+            }
+        },
+        "vmName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the VM"
+            }
+        },
+        "vmSize": {
+            "type": "string",
+            "metadata": {
+                "description": "vmSize"
+            },
+            "allowedValues": [
+                "Standard_D1_v2",
+                "Standard_D2_v2",
+                "Standard_D3_v2",
+                "Standard_D4_v2",
+                "Standard_D5_v2",
+                "Standard_D11_v2",
+                "Standard_D12_v2",
+                "Standard_D13_v2",
+                "Standard_D14_v2",
+                "Standard_D15_v2",
+                "Standard_D2_v2_Promo",
+                "Standard_D3_v2_Promo",
+                "Standard_D4_v2_Promo",
+                "Standard_D5_v2_Promo",
+                "Standard_D11_v2_Promo",
+                "Standard_D12_v2_Promo",
+                "Standard_D13_v2_Promo",
+                "Standard_D14_v2_Promo",
+                "Standard_DS1_v2",
+                "Standard_DS2_v2",
+                "Standard_DS3_v2",
+                "Standard_DS4_v2",
+                "Standard_DS5_v2",
+                "Standard_DS11_v2",
+                "Standard_DS12_v2",
+                "Standard_DS13_v2",
+                "Standard_DS14_v2",
+                "Standard_DS15_v2",
+                "Standard_DS2_v2_Promo",
+                "Standard_DS3_v2_Promo",
+                "Standard_DS4_v2_Promo",
+                "Standard_DS5_v2_Promo",
+                "Standard_DS11_v2_Promo",
+                "Standard_DS12_v2_Promo",
+                "Standard_DS13_v2_Promo",
+                "Standard_DS14_v2_Promo",
+                "Standard_D1",
+                "Standard_D2",
+                "Standard_D3",
+                "Standard_D4",
+                "Standard_D11",
+                "Standard_D12",
+                "Standard_D13",
+                "Standard_D14",
+                "Standard_DS1",
+                "Standard_DS2",
+                "Standard_DS3",
+                "Standard_DS4",
+                "Standard_DS11",
+                "Standard_DS12",
+                "Standard_DS13",
+                "Standard_DS14",
+                "Standard_D2_v3",
+                "Standard_D4_v3",
+                "Standard_D8_v3",
+                "Standard_D16_v3",
+                "Standard_D32_v3",
+                "Standard_D64_v3",
+                "Standard_D2s_v3",
+                "Standard_D4s_v3",
+                "Standard_D8s_v3",
+                "Standard_D16s_v3",
+                "Standard_D32s_v3",
+                "Standard_D64s_v3"
+            ]
+        },
+        "adminUser": {
+            "type": "string",
+            "metadata": {
+                "description": "Admin Username for the VM"
+            }
+        },
+        "adminPassword": {
+            "type": "string",
+            "metadata": {
+                "description": "Admin password for the VM"
+            }
+        }
+    },
+    "variables": {
+        "apiVersion": "2017-05-01",
+        "templateBranch": "ArmBestPractices",
+        "templateBaseUrl": "[concat('https://raw.githubusercontent.com/AzureCAT-GSI/FireHoseTraining2017/', variables('templateBranch'),'/armBestPractices/')]",
+        "infraTemplateUrl": "[concat(variables('templateBaseUrl'), 'Resources/infra.json')]",
+        "workloadTemplateUrl": "[concat(variables('templateBaseUrl'), 'Resources/adworkload.json')]"
+    },
+    "resources": [{
+            "apiVersion": "[variables('apiVersion')]",
+            "name": "infra",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "incremental",
+                "templateLink": {
+                    "uri": "[variables('infraTemplateUrl')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vnetName": {
+                        "value": "[parameters('vnetName')]"
+                    },
+                    "subnetName": {
+                        "value": "[parameters('subnetName')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "[variables('apiVersion')]",
+            "name": "workload",
+            "type": "Microsoft.Resources/deployments",
+            "dependsOn": [
+                "Microsoft.Resources/deployments/infra"
+            ],
+            "properties": {
+                "mode": "incremental",
+                "templateLink": {
+                    "uri": "[variables('workloadTemplateUrl')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "vnetName": {
+                        "value": "[parameters('vnetName')]"
+                    },
+                    "subnetName": {
+                        "value": "[parameters('subnetName')]"
+                    },
+                    "vmName": {
+                        "value": "[parameters('vmName')]"
+                    },
+                    "vmSize": {
+                        "value": "[parameters('vmSize')]"
+                    },
+                    "adminUser": {
+                        "value": "[parameters('adminUser')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPassword')]"
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}
