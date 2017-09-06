@@ -277,6 +277,8 @@ kubectl delete deployment my-nginx
 Most people will eventually want to use declarative configuration files for creating/modifying their applications.  A [simplified introduction](https://kubernetes.io/docs/user-guide/deploying-applications.md)
 is given in a different document.
 
+Save the following file as `azure-vote.yml`
+
 ```yaml
 apiVersion: apps/v1beta1
 kind: Deployment
