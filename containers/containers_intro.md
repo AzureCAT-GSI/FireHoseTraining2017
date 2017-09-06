@@ -219,7 +219,7 @@ kubectl get deployment
 
 #### Exposing your pods to the internet.
 
-On some platforms (for example Google Compute Engine) the kubectl command can integrate with your cloud provider to add a [public IP address](https://kubernetes.io/docs/user-guide/services.md#publishing-services---service-types) for the pods,
+On some platforms (for example Azure) the kubectl command can integrate with your cloud provider to add a [public IP address](https://kubernetes.io/docs/user-guide/services.md#publishing-services---service-types) for the pods,
 to do this run:
 
 ```
