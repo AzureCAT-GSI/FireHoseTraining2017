@@ -333,6 +333,8 @@ kubectl get service azure-vote-front --watch
 
 You can now browse to the external IP address to see the Azure Vote App.
 
+![](https://docs.microsoft.com/en-us/azure/container-service/kubernetes/media/container-service-kubernetes-walkthrough/azure-vote.png)
+
 ## Delete the cluster
 
 ```
