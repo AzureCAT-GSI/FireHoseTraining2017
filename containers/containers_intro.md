@@ -342,7 +342,7 @@ az group delete --name k8sTest --yes --no-wait
 ```
 
 
-### FIX: Pushing up to Docker Hub
+### NEEDS FIX (DO NOT DO): Pushing up to Docker Hub
 
 We can also push the image we created to Docker Hub.
 
