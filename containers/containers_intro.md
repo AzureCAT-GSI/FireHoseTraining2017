@@ -331,6 +331,7 @@ To monitor progress type:
 kubectl get service azure-vote-front --watch
 ```
 
+You can now browse to the external IP address to see the Azure Vote App.
 
 ## Delete the cluster
 
