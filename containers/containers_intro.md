@@ -340,38 +340,3 @@ You can now browse to the external IP address to see the Azure Vote App.
 ```
 az group delete --name k8sTest --yes --no-wait
 ```
-
-
-### NEEDS FIX (DO NOT DO): Pushing up to Docker Hub
-
-We can also push the image we created to Docker Hub.
-
-- [Signup for Docker Hub](https://hub.docker.com/)
-
-You can now log into Docker Hub from the terminal:
-
-```
-# Use the username and password you used in Docker Hub
-docker login
-```
-
-We are going to add another tag for our custom image that will work with Docker Hub Registry
-
-```
-# Usage: docker tag [image] [new image name]
-docker tag <IMAGE_NAME> <DOCKERHUB_USERNAME>/<IMAGE_NAME>
-```
-
-We can push your image up to Docker Hub so other people can download it:
-
-```
-docker push <DOCKERHUB_USERNAME>/<IMAGE_NAME>
-```
-
-I can now view my uploaded image at Docker Hub. Other people can directly pull the image and run on their machine:
-
-```
-docker pull <DOCKERHUB_USERNAME>/<IMAGE_NAME>
-```
-
-Note for Azure Container Service, the same principle applies but you'll change where your registry is pointed to.
