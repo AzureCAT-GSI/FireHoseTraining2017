@@ -125,9 +125,11 @@ container$: apt-get install -y nodejs
 
 This command pulled an [Ubuntu image from Docker Hub](https://hub.docker.com/_/ubuntu/). Docker uses a file called `Dockerfile` to describe how a Docker image should consist of, we'll see more of this later.
 
-You can already see how powerful this can be... you've downloaded an Ubuntu environment that acts and works very similar to an Ubuntu VM except much more lightweight than the VMs.
+Exit the container:
 
-In the next step we'll recreate what we did in Lab 1 but within containers.
+```
+container$: exit
+```
 
 ### Building a Dockerfile
 
