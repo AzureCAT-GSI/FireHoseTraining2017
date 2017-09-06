@@ -185,19 +185,9 @@ k8s-agent-e256a22c-2    Ready                      17m       v1.6.6
 k8s-master-e256a22c-0   Ready,SchedulingDisabled   17m       v1.6.6
 ```
 
-### View K8s UI via proxy
-
-K8s has a full web UI that you can use to view and control your containers and nodes.
-
-```
-az acs kubernetes browse --resource-group k8sTest --name myK8sCluster
-```
-
-### Exploring K8s deployment with NGINX
+### Running your first containers in Kubernetes
 
 Taken from [here](https://github.com/kubernetes/kubernetes/blob/master/examples/simple-nginx.md).
-
-#### Running your first containers in Kubernetes
 
 From this point onwards, it is assumed that `kubectl` is on your path from one of the getting started guides.
 
@@ -235,6 +225,15 @@ kubectl get services
 ```
 
 In order to access your nginx landing page, you also have to make sure that traffic from external IPs is allowed. Do this by opening a firewall to allow traffic on port 80.
+
+
+### View K8s UI via proxy
+
+K8s has a full web UI that you can use to view and control your containers and nodes.
+
+```
+az acs kubernetes browse --resource-group k8sTest --name myK8sCluster
+```
 
 #### Cleanup
 
