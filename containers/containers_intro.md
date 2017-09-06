@@ -131,7 +131,7 @@ In the next step we'll recreate what we did in Lab 1 but within containers.
 
 ### Building a Dockerfile
 
-We will do this from scratch (following this [guide](https://docs.docker.com/get-started/part2/#run-the-app)).
+We will do this from scratch (following this [guide](https://docs.docker.com/get-started/part2/#define-a-container-with-a-dockerfile)).
 
 ### Pushing up to Docker Hub
 
