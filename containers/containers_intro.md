@@ -159,6 +159,8 @@ az acs create --orchestrator-type kubernetes --resource-group k8sTest --name myK
 az acs kubernetes install-cli
 ```
 
+**Note:** If you are running on Windows withim `cmd` or `PowerShell`, you may need to add the folder of where Kubernetes binary was installed to your path.
+
 ### Connect to K8s cluster
 
 ```
