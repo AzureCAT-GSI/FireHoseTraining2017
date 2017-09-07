@@ -350,10 +350,6 @@ az group delete --name k8sTest --yes --no-wait
 az group create --name aci_grp --location eastus
 ```
 
-Here is an example of Azure Container Instance:
-
-![](https://azurecomcdn.azureedge.net/mediahandler/acomblog/media/Default/blog/5f9c966d-1b84-4be1-8484-3b22ff325deb.gif)
-
 ### Deploy a NGINX container
 
 Following command will ask for a load balancer with an externally reachable IP address.
@@ -375,7 +371,3 @@ az container create -g aci_grp --name nginx --image library/nginx --ip-address p
 ```
 
 Another great project to check out if you're using ACI and K8s is: [ACI Connector for Kubernetes](https://github.com/azure/aci-connector-k8s)
-
-Here is a demo of the ACI Connector for K8s:
-
-![](https://azurecomcdn.azureedge.net/mediahandler/acomblog/media/Default/blog/ad5b4178-b792-4354-b3af-cb9e7de955ea.gif)
