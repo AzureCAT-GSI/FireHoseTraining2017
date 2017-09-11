@@ -14,5 +14,5 @@
             value: ansibleadmin
           adminPassword:
             value: "ansibleP@ssw0rd.1"
-        template_link: 'https://raw.githubusercontent.com/marajade9/azure-ansible/master/azure-templates/simplelinux.json'
+        template_link: 'https://raw.githubusercontent.com/claudhg9/azure-ansible/master/azure-templates/simplelinux.json'
       register: azure
